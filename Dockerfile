@@ -1,14 +1,18 @@
-# Use a base image with Java and Alpine Linux
-FROM adoptopenjdk:11-jre-hotspot
+
+# Use an official Tomcat image as the base image
+FROM tomcat:9.0-jdk11-openjdk
 
 # Set the working directory in the container
-WORKDIR /app
+WORKDIR /usr/local/tomcat/webapps
 
-# Copy the JAR file into the container
-COPY target/*.jar /app/
+# Remove the default Tomcat web applications
+RUN rm -rf ROOT docs examples host-manager manager
 
-# Expose port 8080
-EXPOSE 8080
+# Copy your Java web application WAR file into the container
+COPY path/to/your/application.war ./ROOT.war
 
-# Command to run the application
-CMD ["java", "-jar", "mywebapp.jar"]
+# Expose the port that Tomcat will run on
+EXPOSE 8081
+
+# Start Tomcat when the container starts
+CMD ["catalina.sh", "run"]
